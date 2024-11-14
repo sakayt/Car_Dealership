@@ -183,3 +183,29 @@ JOIN Payment ON Customer.PaymentID = Payment.PaymentID;
 SELECT Bank, COUNT(PaymentID) AS TotalPayments
 FROM Payment
 GROUP BY Bank;
+
+-- JOIN query for Interacts_with table
+SELECT 
+    Customer.Name AS CustomerName,
+    Customer.Email AS CustomerEmail,
+    Car_Dealer.Name AS DealerName,
+    Car_Dealer.Email AS DealerEmail
+FROM 
+    Interacts_with
+JOIN 
+    Customer ON Interacts_with.CustomerID = Customer.CustomerID
+JOIN 
+    Car_Dealer ON Interacts_with.DealerID = Car_Dealer.DealerID;
+
+-- JOIN query for Hires table
+SELECT 
+    Car_Dealer.Name AS DealerName,
+    Car_Dealer.Email AS DealerEmail,
+    Manager.Name AS ManagerName,
+    Manager.Email AS ManagerEmail
+FROM 
+    Hires
+JOIN 
+    Car_Dealer ON Hires.DealerID = Car_Dealer.DealerID
+JOIN 
+    Manager ON Hires.ManagerID = Manager.ManagerID;
