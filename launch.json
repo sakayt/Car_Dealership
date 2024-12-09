@@ -1,0 +1,18 @@
+{
+    "customers": [
+        {
+            "id": 1,
+            "name": "John Doe",
+            "address": "123 Elm St",
+            "phone": "555-1234",
+            "email": "johndoe@example.com"
+        },
+        {
+            "id": 2,
+            "name": "Jane Smith",
+            "address": "456 Oak Ave",
+            "phone": "555-5678",
+            "email": "janesmith@example.com"
+        }
+    ]
+}

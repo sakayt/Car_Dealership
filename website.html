@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Dealership Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Car Dealership Management System</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/register">Register</a></li>
+                <li><a href="/admin">Admin Dashboard</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home">
+            <h2>Welcome to the Car Dealership</h2>
+            <p>Your trusted partner in buying and selling cars.</p>
+        </section>
+
+        <!-- Registration Section -->
+        <section id="register">
+            <h2>Register</h2>
+            <form method="post" action="/register">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" placeholder="Enter your address" required>
+
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+                <button type="submit">Register</button>
+            </form>
+        </section>
+
+        <!-- Admin Dashboard Section -->
+        <section id="admin">
+            <h2>Admin Dashboard</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Customer ID</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers %}
+                    <tr>
+                        <td>{{ customer.CustomerID }}</td>
+                        <td>{{ customer.Name }}</td>
+                        <td>{{ customer.Address }}</td>
+                        <td>{{ customer.Phone }}</td>
+                        <td>{{ customer.Email }}</td>
+                        <td>
+                            <form method="post" action="/admin">
+                                <input type="hidden" name="customer_id" value="{{ customer.CustomerID }}">
+                                <button type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Car Dealership. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
