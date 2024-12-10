@@ -110,7 +110,7 @@
         }
 
         th, td {
-            padding: 1rem;
+            padding: 0.5rem; /* Reduced padding to make things fit better */
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
@@ -126,6 +126,12 @@
 
         .delete-btn {
             background-color: #dc3545;
+            color: #fff;
+            padding: 0.3rem 0.5rem; /* Smaller padding */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem; /* Slightly smaller font size */
         }
 
         .delete-btn:hover {
@@ -155,6 +161,18 @@
         .welcome-section p {
             font-size: 1.2rem;
             color: #666;
+        }
+
+        .drag-handle {
+            cursor: move;
+        }
+
+        .delete-form {
+            margin: 0;
+        }
+
+        tr.dragging {
+            opacity: 0.5;
         }
     </style>
 </head>
@@ -221,7 +239,7 @@
 
                     <div class="form-group">
                         <label for="license_plate">License Plate:</label>
-                        <input type="text" id="license_plate" name="license_plate" placeholder="Enter license plate number" required>
+                        <input type="text" id="license_plate" name="license_plate" placeholder="Enter license plate number" maxlength="7" required>
                     </div>
                 </div>
 
@@ -233,9 +251,10 @@
 
         <section id="admin">
             <h2>Admin Dashboard</h2>
-            <table>
+            <table id="recordsTable">
                 <thead>
                     <tr>
+                        <th></th> <!-- Reorder handle column -->
                         <th>ID</th>
                         <th>Customer Name</th>
                         <th>Address</th>
@@ -245,25 +264,26 @@
                         <th>Model</th>
                         <th>Year</th>
                         <th>License Plate</th>
-                        <th>Actions</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for customer in customers %}
-                    <tr>
-                        <td>{{ customer.ID }}</td>
-                        <td>{{ customer.Name }}</td>
-                        <td>{{ customer.Address }}</td>
-                        <td>{{ customer.Phone }}</td>
-                        <td>{{ customer.Email }}</td>
-                        <td>{{ customer.Make }}</td>
-                        <td>{{ customer.Model }}</td>
-                        <td>{{ customer.Year }}</td>
-                        <td>{{ customer.LicensePlate }}</td>
+                    {% for record in records %}
+                    <tr data-id="{{ record['ID'] }}" draggable="true">
+                        <td class="drag-handle">⠿</td>
+                        <td>{{ record['ID'] }}</td>
+                        <td>{{ record['Name'] }}</td>
+                        <td>{{ record['Address'] }}</td>
+                        <td>{{ record['Phone'] }}</td>
+                        <td>{{ record['Email'] }}</td>
+                        <td>{{ record['Make'] }}</td>
+                        <td>{{ record['Model'] }}</td>
+                        <td>{{ record['Year'] }}</td>
+                        <td>{{ record['LicensePlate'] }}</td>
                         <td>
-                            <form method="post" action="/admin">
-                                <input type="hidden" name="customer_id" value="{{ customer.ID }}">
-                                <button type="submit" class="delete-btn">Delete</button>
+                            <form method="post" class="delete-form" action="/admin">
+                                <input type="hidden" name="customer_id" value="{{ record['ID'] }}">
+                                <button type="submit" class="delete-btn">X</button>
                             </form>
                         </td>
                     </tr>
@@ -276,5 +296,65 @@
     <footer>
         <p>&copy; 2024 Car Dealership Management System. All Rights Reserved.</p>
     </footer>
+
+    <script>
+        const tableBody = document.querySelector('#recordsTable tbody');
+        let draggedRow = null;
+
+        tableBody.addEventListener('dragstart', (e) => {
+            if (e.target.tagName === 'TR') {
+                draggedRow = e.target;
+                e.target.classList.add('dragging');
+            }
+        });
+
+        tableBody.addEventListener('dragend', (e) => {
+            if (draggedRow) {
+                draggedRow.classList.remove('dragging');
+                draggedRow = null;
+            }
+        });
+
+        tableBody.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const afterElement = getDragAfterElement(tableBody, e.clientY);
+            const dragging = document.querySelector('.dragging');
+            if (afterElement == null) {
+                tableBody.appendChild(dragging);
+            } else {
+                tableBody.insertBefore(dragging, afterElement);
+            }
+        });
+
+        tableBody.addEventListener('drop', (e) => {
+            // After drop, gather new order and send via AJAX
+            const rows = tableBody.querySelectorAll('tr[data-id]');
+            const order = [];
+            rows.forEach((row) => {
+                order.push(row.getAttribute('data-id'));
+            });
+
+            fetch('/update_order', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({order: order})
+            }).then(response => response.json())
+              .then(data => console.log(data));
+        });
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('tr[data-id]:not(.dragging)')];
+
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+    </script>
 </body>
 </html>
