@@ -4,7 +4,159 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car Dealership Management System</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #1a237e;
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #303f9f;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        h1, h2 {
+            color: #1a237e;
+            margin-bottom: 1rem;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #1a237e;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #303f9f;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: white;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #1a237e;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        footer {
+            background-color: #1a237e;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .welcome-section {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .welcome-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-section p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -12,65 +164,106 @@
         <nav>
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="/register">Register</a></li>
-                <li><a href="/admin">Admin Dashboard</a></li>
+                <li><a href="#register">Register</a></li>
+                <li><a href="#admin">Admin Dashboard</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <!-- Home Section -->
-        <section id="home">
-            <h2>Welcome to the Car Dealership</h2>
-            <p>Your trusted partner in buying and selling cars.</p>
+        <section id="home" class="welcome-section">
+            <h2>Welcome to Our Car Dealership</h2>
+            <p>Managing your vehicle inventory with efficiency and precision</p>
         </section>
 
-        <!-- Registration Section -->
         <section id="register">
-            <h2>Register</h2>
+            <h2>Register New Vehicle</h2>
             <form method="post" action="/register">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                <div class="customer-info">
+                    <h3>Customer Information</h3>
+                    <div class="form-group">
+                        <label for="name">Full Name:</label>
+                        <input type="text" id="name" name="name" placeholder="Enter customer's full name" required>
+                    </div>
 
-                <label for="address">Address:</label>
-                <input type="text" id="address" name="address" placeholder="Enter your address" required>
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <input type="text" id="address" name="address" placeholder="Enter complete address" required>
+                    </div>
 
-                <label for="phone">Phone:</label>
-                <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
+                    <div class="form-group">
+                        <label for="phone">Phone Number:</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter phone number" required>
+                    </div>
 
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    <div class="form-group">
+                        <label for="email">Email Address:</label>
+                        <input type="email" id="email" name="email" placeholder="Enter email address" required>
+                    </div>
+                </div>
 
-                <button type="submit">Register</button>
+                <div class="vehicle-info">
+                    <h3>Vehicle Information</h3>
+                    <div class="form-group">
+                        <label for="make">Make:</label>
+                        <input type="text" id="make" name="make" placeholder="Enter vehicle make" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="model">Model:</label>
+                        <input type="text" id="model" name="model" placeholder="Enter vehicle model" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="year">Year:</label>
+                        <input type="number" id="year" name="year" placeholder="Enter vehicle year" min="1900" max="2024" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="license_plate">License Plate:</label>
+                        <input type="text" id="license_plate" name="license_plate" placeholder="Enter license plate number" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit">Register Vehicle</button>
+                </div>
             </form>
         </section>
 
-        <!-- Admin Dashboard Section -->
         <section id="admin">
             <h2>Admin Dashboard</h2>
-            <table border="1">
+            <table>
                 <thead>
                     <tr>
-                        <th>Customer ID</th>
-                        <th>Name</th>
+                        <th>ID</th>
+                        <th>Customer Name</th>
                         <th>Address</th>
                         <th>Phone</th>
                         <th>Email</th>
+                        <th>Vehicle Make</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>License Plate</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for customer in customers %}
                     <tr>
-                        <td>{{ customer.CustomerID }}</td>
+                        <td>{{ customer.ID }}</td>
                         <td>{{ customer.Name }}</td>
                         <td>{{ customer.Address }}</td>
                         <td>{{ customer.Phone }}</td>
                         <td>{{ customer.Email }}</td>
+                        <td>{{ customer.Make }}</td>
+                        <td>{{ customer.Model }}</td>
+                        <td>{{ customer.Year }}</td>
+                        <td>{{ customer.LicensePlate }}</td>
                         <td>
                             <form method="post" action="/admin">
-                                <input type="hidden" name="customer_id" value="{{ customer.CustomerID }}">
-                                <button type="submit">Delete</button>
+                                <input type="hidden" name="customer_id" value="{{ customer.ID }}">
+                                <button type="submit" class="delete-btn">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -81,7 +274,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2024 Car Dealership. All Rights Reserved.</p>
+        <p>&copy; 2024 Car Dealership Management System. All Rights Reserved.</p>
     </footer>
 </body>
 </html>
